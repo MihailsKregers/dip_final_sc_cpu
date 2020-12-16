@@ -23,5 +23,6 @@ module decoder
 	input [31:0] instr
     );
 
+	reg [31:0] instr;
 
 endmodule
