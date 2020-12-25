@@ -25,14 +25,13 @@ module reg_file
 	input [4:0] AB,
 	input [4:0] AD,
 	input WR,
-	input CLR,
 	output [31:0] A,
 	output [31:0] B
     );
 	 
-	reg [31:0] data [0:31];
+	reg [31:0] file [0:31];
 	 
-	always@(CLK) begin
+	always@(*) begin
 		if (WR == 1) begin
 			file[AD] <= D;
 		end

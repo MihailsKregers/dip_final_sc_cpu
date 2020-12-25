@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    17:00:50 12/11/2020 
+// Create Date:    13:01:23 12/24/2020 
 // Design Name: 
-// Module Name:    cu 
+// Module Name:    mux_alu_source 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,11 +18,23 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module cu(
-	input [31:0] cmd
+module mux_alu_source(
+		input [31:0] REGISTER,
+		input [31:0] IMMEDIATE,
+		input IS_REG,
+		output [31:0] ALU
     );
-	 
-	 
 
+	reg [31:0] val;
+	
+	always@(*) begin
+		if (IS_REG == 1) begin
+			val <= REGISTER;
+		end else if (IS_IMM == 0) begin
+			val <= IMMEDIATE;
+		end
+	end
+	
+	assign ALU = val;
 
 endmodule
