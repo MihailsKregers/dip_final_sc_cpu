@@ -44,6 +44,12 @@
 `define ALU_OR		4'b0110
 `define ALU_AND		4'b0111
 
+`define ALU_EQ		3'b000
+`define ALU_NE		3'b001
+`define ALU_LT		3'b100
+`define ALU_GE		3'b101
+`define ALU_LTU		3'b110
+`define ALU_GEU		3'b111
 
 `define FUN_T_E		3'b000
 `define FUN_T_RW	3'b001

@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    14:45:36 12/29/2020 
+// Create Date:    17:05:04 12/29/2020 
 // Design Name: 
-// Module Name:    adder 
+// Module Name:    alu_cmp 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,12 +18,18 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module adder(
-		input [31:0] IN1,
-		input [31:0] IN2,
-		output [31:0] OUT
+`include "defs.v"
+module alu_cmp(
+		input [31:0] RS1,
+		input [31:0] RS2,
+		input [2:0] OP,
+		output OUT
     );
-	 
-	 assign OUT = IN1 + IN2;
+
+	assign OUT = (OP == `ALU_EQ) ? (RS1 == RS2) : (
+	(OP == `ALU_NE) ? (RS1 != RS2) : (
+	(OP == `ALU_LT) ? ($signed(RS1) < $signed(RS2)) : (
+	(OP == `ALU_GE) ? ($signed(RS1) >= $signed(RS2)) : (
+	(OP == `ALU_LTU) ? (RS1 < RS2) : (RS1 >= RS2) ) ) ) );
 
 endmodule

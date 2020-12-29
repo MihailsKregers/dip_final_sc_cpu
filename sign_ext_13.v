@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    14:45:36 12/29/2020 
+// Create Date:    16:47:07 12/29/2020 
 // Design Name: 
-// Module Name:    adder 
+// Module Name:    sign_ext_13 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,12 +18,11 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module adder(
-		input [31:0] IN1,
-		input [31:0] IN2,
-		output [31:0] OUT
+module sign_ext_13(
+		input [12:0] UNEXT,
+		output [31:0] EXT
     );
-	 
-	 assign OUT = IN1 + IN2;
+
+	assign EXT = {{19{UNEXT[12]}}, UNEXT};
 
 endmodule

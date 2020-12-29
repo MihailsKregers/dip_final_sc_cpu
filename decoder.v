@@ -29,7 +29,9 @@ module decoder
 	output [3:0] ALU_OP,
 	output ALU_SRC,
 	output [11:0] IMM,
-	output ALLOW_WR
+	output ALLOW_WR, 
+	output [12:0] JMP_ADDR,
+	output ALU_C_OP
     );
 	
 	reg alu_src;
@@ -39,6 +41,8 @@ module decoder
 	reg [3:0] alu_op;
 	reg [11:0] imm;
 	reg allow_wr;
+	reg [12:0] jmp_addr;
+	reg [2:0] alu_c_op;
 	
 	always@(CLK) begin
 		case (INSTR[6:0])
@@ -50,31 +54,15 @@ module decoder
 				imm <= INSTR[31:20];
 				alu_op[2:0] <= INSTR[14:12];
 				allow_wr <= 1;
-				if (INSTR[5] == 1 || INSTR[14:12] == 3'b101) begin
-					alu_op[3] <= INSTR[30];
-				end else begin
-					alu_op[3] <= 0;
-				end
+				alu_op[3] <= (INSTR[5] == 1'b1 || INSTR[14:12] == 3'b101) ? INSTR[30] : 1'b0;
 			end
 			`OP_COND_BR: begin
-			
+				rs1 <= INSTR[19:15];
+				rs2 <= INSTR[24:20];
+				jmp_addr <= {INSTR[31],INSTR[7],INSTR[30:25],INSTR[11:8],0};
+				alu_c_op <= INSTR[14:12];
 			end
 		endcase
-		
-		
-		if (INSTR[6:0] == `OP_ALU_I || INSTR[6:0] == `OP_ALU) begin
-			alu_src <= INSTR[5];
-			rs1 <= INSTR[19:15];
-			rs2 <= INSTR[24:20];
-			rd <= INSTR[11:7];
-			imm <= INSTR[31:20];
-			alu_op[2:0] <= INSTR[14:12];
-			if (INSTR[5] == 1 || INSTR[14:12] == 3'b101) begin
-				alu_op[3] <= INSTR[30];
-			end else begin
-				alu_op[3] <= 0;
-			end
-		end
 	end
 	
 	assign ALU_SRC = alu_src;
@@ -84,5 +72,7 @@ module decoder
 	assign ALU_OP = alu_op;
 	assign IMM = imm;
 	assign ALLOW_WR = allow_wr;
+	assign JMP_ADDR = jmp_addr;
+	assign ALU_C_OP = alu_c_op;
 
 endmodule
