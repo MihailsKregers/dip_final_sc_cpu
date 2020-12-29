@@ -56,4 +56,6 @@
 `define FUN_S_NOA	7'b0000000
 `define FUN_S_ISA	7'b0100000
 
+`define REG_ZERO 	5'b00000
+
 `endif /* _DEFS_V_ */

@@ -18,6 +18,8 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
+`include "defs.v"
+
 module reg_file
 	(
 	input CLK,
@@ -38,7 +40,7 @@ module reg_file
 		end
 	end
 	
-	assign A = file[AA];
-	assign B = file[BB];
+	assign RS1 = (A1 == `REG_ZERO) ? 0 : file[A1];
+	assign RS2 = (A2 == `REG_ZERO) ? 0 : file[A2];
 	
 endmodule
