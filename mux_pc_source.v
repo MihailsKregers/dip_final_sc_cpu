@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    15:38:36 12/29/2020 
+// Create Date:    16:37:50 12/29/2020 
 // Design Name: 
-// Module Name:    risc_v_32 
+// Module Name:    pc_mux 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,10 +18,13 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module risc_v_32(
-		input I_CLK,
-		input I_RST
+module pc_mux(
+		input [31:0] JUMP,
+		input [31:0] NEXT,
+		input BRANCH,
+		output [31:0] PC
     );
 
+	assign PC = (BRANCH == 1'b1) ? JUMP : NEXT;
 
 endmodule

@@ -28,7 +28,8 @@ module decoder
 	output [4:0] RD,
 	output [3:0] ALU_OP,
 	output ALU_SRC,
-	output [11:0] IMM
+	output [11:0] IMM,
+	output ALLOW_WR
     );
 	
 	reg alu_src;
@@ -37,6 +38,7 @@ module decoder
 	reg [4:0] rd;
 	reg [3:0] alu_op;
 	reg [11:0] imm;
+	reg allow_wr;
 	
 	always@(CLK) begin
 		case (INSTR[6:0])
@@ -47,13 +49,16 @@ module decoder
 				rd <= INSTR[11:7];
 				imm <= INSTR[31:20];
 				alu_op[2:0] <= INSTR[14:12];
+				allow_wr <= 1;
 				if (INSTR[5] == 1 || INSTR[14:12] == 3'b101) begin
 					alu_op[3] <= INSTR[30];
 				end else begin
 					alu_op[3] <= 0;
 				end
 			end
+			`OP_COND_BR: begin
 			
+			end
 		endcase
 		
 		
@@ -78,5 +83,6 @@ module decoder
 	assign RD = rd;
 	assign ALU_OP = alu_op;
 	assign IMM = imm;
+	assign ALLOW_WR = allow_wr;
 
 endmodule
