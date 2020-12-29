@@ -24,17 +24,7 @@ module mux_alu_source(
 		input IS_REG,
 		output [31:0] ALU
     );
-
-	reg [31:0] val;
 	
-	always@(*) begin
-		if (IS_REG == 1) begin
-			val <= REGISTER;
-		end else if (IS_IMM == 0) begin
-			val <= IMMEDIATE;
-		end
-	end
-	
-	assign ALU = val;
+	assign ALU = IS_REG ? REGISTER : IMMEDIATE;
 
 endmodule

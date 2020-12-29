@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    16:20:26 12/11/2020 
+// Create Date:    12:55:21 12/28/2020 
 // Design Name: 
-// Module Name:    reg_file 
+// Module Name:    sign_ext 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,27 +18,11 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module reg_file
-	(
-	input CLK,
-	input [31:0] RD,
-	input [4:0] A1,
-	input [4:0] A2,
-	input [4:0] AD,
-	input WR,
-	output [31:0] RS1,
-	output [31:0] RS2
+module sign_ext(
+		input [11:0] UNEXT,
+		output [31:0] EXT
     );
-	 
-	reg [31:0] file [0:31];
-	 
-	always@(posedge CLK) begin
-		if (WR == 1) begin
-			file[AD] <= RD;
-		end
-	end
-	
-	assign A = file[AA];
-	assign B = file[BB];
-	
+
+	assign EXT = {{20{UNEXT[11]}}, UNEXT};
+
 endmodule

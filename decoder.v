@@ -39,8 +39,25 @@ module decoder
 	reg [11:0] imm;
 	
 	always@(CLK) begin
+		case (INSTR[6:0])
+			`OP_ALU, `OP_ALU_I: begin
+				alu_src <= INSTR[5];
+				rs1 <= INSTR[19:15];
+				rs2 <= INSTR[24:20];
+				rd <= INSTR[11:7];
+				imm <= INSTR[31:20];
+				alu_op[2:0] <= INSTR[14:12];
+				if (INSTR[5] == 1 || INSTR[14:12] == 3'b101) begin
+					alu_op[3] <= INSTR[30];
+				end else begin
+					alu_op[3] <= 0;
+				end
+			end
+			
+		endcase
 		
-		if (INSTR[6:0] == OP_ALU_I || INSTR[6:0] == OP_ALU) begin
+		
+		if (INSTR[6:0] == `OP_ALU_I || INSTR[6:0] == `OP_ALU) begin
 			alu_src <= INSTR[5];
 			rs1 <= INSTR[19:15];
 			rs2 <= INSTR[24:20];
