@@ -21,7 +21,6 @@
 `include "defs.v"
 module decoder
 	(
-	input CLK,
 	input [31:0] INSTR,
 	output [4:0] RS1,
 	output [4:0] RS2,
@@ -34,33 +33,84 @@ module decoder
 	output ALU_C_OP
     );
 	
-	reg alu_src;
+
 	reg [4:0] rs1;
 	reg [4:0] rs2;
 	reg [4:0] rd;
+	
 	reg [3:0] alu_op;
 	reg [11:0] imm;
-	reg allow_wr;
-	reg [12:0] jmp_addr;
-	reg [2:0] alu_c_op;
+	reg [5:0] imm_shamt;
+	reg rf_allow_wr;
+	reg [1:0] mux_op1;
+	reg [1:0] mux_op2;
+	reg [1:0] mux_din_src;
 	
-	always@(CLK) begin
-		case (INSTR[6:0])
-			`OP_ALU, `OP_ALU_I: begin
-				alu_src <= INSTR[5];
+	always@(INSTR) begin
+		case (INSTR[6:0]) // opcode case
+			`OP_ALU: begin // alu, not immediate
 				rs1 <= INSTR[19:15];
 				rs2 <= INSTR[24:20];
 				rd <= INSTR[11:7];
+				case (INSTR[14:12]) // funct3 case
+					`FT_ADD: begin
+						if (INSTR[30] == 0) begin
+							alu_op <= `ALU_ADD;
+						end else begin
+							alu_op <= `ALU_SUB;
+						end
+					end
+					`FT_SLL: alu_op <= `ALU_SLL;
+					`FT_SLT: alu_op <= `ALU_LT;
+					`FT_SLTU: alu_op <= `ALU_LTU;
+					`FT_XOR: alu_op <= `ALU_XOR;
+					`FT_SRL: begin
+						if (INSTR[30] == 0) begin
+							alu_op <= `ALU_SRL;
+						end else begin
+							alu_op <= `ALU_SRA;
+						end
+					end
+					`FT_OR: alu_op <= `ALU_OR;
+					`FT_AND: alu_op <= `ALU_AND;
+				endcase
+				mux_op1 <= `OP1_SRC_RD1;
+				mux_op2 <= `OP2_SRC_RD2;
+				mux_din_src <= `DIN_SRC_ALU;
+				rf_allow_wr <= `REG_WRITE_ALLOWED;
+			end
+			`OP_ALU_IMM: begin // alu, immediate
+				rs1 <= INSTR[19:15];
 				imm <= INSTR[31:20];
-				alu_op[2:0] <= INSTR[14:12];
-				allow_wr <= 1;
-				alu_op[3] <= (INSTR[5] == 1'b1 || INSTR[14:12] == 3'b101) ? INSTR[30] : 1'b0;
+				imm_shamt <= INSTR[24:20];
+				rd <= INSTR[11:7];
+				case (INSTR[14:12]) //funct3 case
+					`FT_ADD: alu_op <= `ALU_ADD;
+					`FT_SLT: alu_op <= `ALU_LT;
+					`FT_SLTU: alu_op <= `ALU_LTU;
+					`FT_XOR: alu_op <= `ALU_XOR;
+					`FT_OR: alu_op <= `ALU_OR;
+					`FT_AND: alu_op <= `ALU_AND;
+					`FT_SLL: alu_op <= `ALU_SLL;
+					`FT_SRL: begin
+						if (INSTR[30] == 0) begin
+							alu_op <= `ALU_SRL;
+						end else begin
+							alu_op <= `ALU_SRA;
+						end
+					end
+				endcase
 			end
 			`OP_COND_BR: begin
 				rs1 <= INSTR[19:15];
 				rs2 <= INSTR[24:20];
 				jmp_addr <= {INSTR[31],INSTR[7],INSTR[30:25],INSTR[11:8],0};
 				alu_c_op <= INSTR[14:12];
+			end
+			`OP_JAL, `OP_JALR: begin
+				rd <= INSTR[11:7];
+				allow_wr <= 1'b1;
+				
 			end
 		endcase
 	end

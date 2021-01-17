@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    16:20:26 12/11/2020 
+// Create Date:    12:10:40 01/17/2021 
 // Design Name: 
-// Module Name:    reg_file 
+// Module Name:    mux_pc_src 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -19,28 +19,18 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 `include "defs.v"
-
-module reg_file
-	(
-	input CLK,
-	input [31:0] DIN,
-	input [4:0] RS1,
-	input [4:0] RS2,
-	input [4:0] RD,
-	input WR,
-	output [31:0] RD1,
-	output [31:0] RD2
+module mux_pc_src(
+		input [31:0] ALU,
+		input [31:0] INTERRUPT,
+		input [31:0] COND_BR,
+		input [31:0] PC_ADDER,
+		input [1:0] CTL,
+		input COND,
+		output [31:0] OUT
     );
-	 
-	reg [31:0] file [0:31];
-	 
-	always@(posedge CLK) begin
-		if (WR == 1) begin
-			file[AD] <= RD;
-		end
-	end
-	
-	assign RD1 = (A1 == `REG_ZERO) ? 0 : file[A1];
-	assign RD2 = (A2 == `REG_ZERO) ? 0 : file[A2];
-	
+
+assign OUT = (CTL == `PC_SRC_ALU) ? ALU:
+					((CTL == `PC_SRC_INTERRUPT) ? INTERRUPT : 
+					((CTL == `PC_SRC_COND_BR && COND == `PC_SRC_BRANCH_YES) ? COND_BR : PC_ADDER));
+
 endmodule

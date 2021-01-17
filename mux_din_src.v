@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    16:20:26 12/11/2020 
+// Create Date:    18:46:59 01/16/2021 
 // Design Name: 
-// Module Name:    reg_file 
+// Module Name:    mux_din_src 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -19,28 +19,17 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 `include "defs.v"
-
-module reg_file
-	(
-	input CLK,
-	input [31:0] DIN,
-	input [4:0] RS1,
-	input [4:0] RS2,
-	input [4:0] RD,
-	input WR,
-	output [31:0] RD1,
-	output [31:0] RD2
+module mux_din_src(
+		input [31:0] PC,
+		input [31:0] MM,
+		input [31:0] ALU,
+		input [31:0] INST,
+		input [1:0] CTL,
+		output [31:0] OUT
     );
-	 
-	reg [31:0] file [0:31];
-	 
-	always@(posedge CLK) begin
-		if (WR == 1) begin
-			file[AD] <= RD;
-		end
-	end
-	
-	assign RD1 = (A1 == `REG_ZERO) ? 0 : file[A1];
-	assign RD2 = (A2 == `REG_ZERO) ? 0 : file[A2];
-	
+
+assign OUT = (CTL == `DIN_SRC_PC) ? PC :
+					((CTL == `DIN_SRC_MM) ? MM : 
+					((CTL == `DIN_SRC_ALU) ? ALU : INST));
+
 endmodule

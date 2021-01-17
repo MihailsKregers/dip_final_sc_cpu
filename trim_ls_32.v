@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    16:47:07 12/29/2020 
+// Create Date:    17:40:29 01/16/2021 
 // Design Name: 
-// Module Name:    sign_ext_13 
+// Module Name:    trim_ls_32 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,11 +18,11 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module sign_ext_13(
-		input [12:0] UNEXT,
-		output [31:0] EXT
+module trim_ls_32(
+		input [31:0] IN,
+		output OUT
     );
 
-	assign EXT = {{19{UNEXT[12]}}, UNEXT};
+assign OUT = IN[0];
 
 endmodule

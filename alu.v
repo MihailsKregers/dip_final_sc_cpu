@@ -20,31 +20,34 @@
 //////////////////////////////////////////////////////////////////////////////////
 `include "defs.v"
 module alu(
-		input CLK,
-		input [31:0] RS1,
-		input [31:0] RS2,
-		input [4:0] OP,
-		output [31:0] RD
+		input [31:0] OP1,
+		input [31:0] OP2,
+		input [4:0] CTL,
+		output [31:0] OUT
     );
 	 
 	 reg [31:0] result;
 	 
-	 always@(posedge CLK) begin
-		case(OP)
-			`ALU_ADD: result <= RS1 + RS2;
-			`ALU_SUB: result <= RS1 - RS2;
-			`ALU_AND: result <= RS1 & RS2;
-			`ALU_OR: result <= RS1 | RS2;
-			`ALU_XOR: result <= RS1 ^ RS2;
-			`ALU_SRL: result <= RS1 >> RS2;
-			`ALU_SRA: result <= RS >>> RS2;
-			`ALU_SLL: result <= RS1 << RS2;
-			`ALU_SLT: result <= $signed(RS1) < $signed(RS2);
-			`ALU_SLTU: result <= RS1 < RS2;
+	 always@(OP1, OP2, CTL) begin
+		case(CTL)
+			`ALU_ADD:	assign result = OP1 + OP2;
+			`ALU_SUB:	assign result = OP1 - OP2;
+			`ALU_AND:	assign result = OP1 & OP2;
+			`ALU_OR:		assign result = OP1 | OP2;
+			`ALU_XOR:	assign result = OP1 ^ OP2;
+			`ALU_SRL:	assign result = OP1 >> OP2;
+			`ALU_SRA:	assign result = OP1 >>> OP2;
+			`ALU_SLL:	assign result = OP1 << OP2;
+			`ALU_EQ:		assign result = OP1 == OP2;
+			`ALU_NE:		assign result = OP1 != OP2;
+			`ALU_LT:		assign result = $signed(OP1) < $signed(OP2);
+			`ALU_GE:		assign result = $signed(OP1) >= $signed(OP2);
+			`ALU_LTU:	assign result = OP1 < OP2;
+			`ALU_GEU:	assign result = OP1 > OP2;
 		endcase
 	 end
 	 
-	 assign RD = result;
+	 assign OUT = result;
 
 
 endmodule

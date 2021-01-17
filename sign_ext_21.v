@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    16:47:07 12/29/2020 
+// Create Date:    18:40:15 01/17/2021 
 // Design Name: 
-// Module Name:    sign_ext_13 
+// Module Name:    sign_ext_21 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,11 +18,11 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module sign_ext_13(
-		input [12:0] UNEXT,
+module sign_ext_20(
+		input [20:0] UNEXT,
 		output [31:0] EXT
     );
 
-	assign EXT = {{19{UNEXT[12]}}, UNEXT};
+	assign EXT = {{11{UNEXT[20]}}, UNEXT};
 
 endmodule

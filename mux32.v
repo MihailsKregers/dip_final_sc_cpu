@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    16:47:07 12/29/2020 
+// Create Date:    17:47:39 12/30/2020 
 // Design Name: 
-// Module Name:    sign_ext_13 
+// Module Name:    mux32 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,11 +18,13 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module sign_ext_13(
-		input [12:0] UNEXT,
-		output [31:0] EXT
+module mux32(
+		input [31:0] IN1,
+		input [31:0] IN0,
+		input COND,
+		output [31:0] OUT
     );
 
-	assign EXT = {{19{UNEXT[12]}}, UNEXT};
+	assign OUT = (COND == 1'b1) ? IN1 : IN0;
 
 endmodule

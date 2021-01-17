@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    16:47:07 12/29/2020 
+// Create Date:    18:18:45 01/17/2021 
 // Design Name: 
-// Module Name:    sign_ext_13 
+// Module Name:    riscv 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,11 +18,8 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module sign_ext_13(
-		input [12:0] UNEXT,
-		output [31:0] EXT
+module riscv(
     );
 
-	assign EXT = {{19{UNEXT[12]}}, UNEXT};
 
 endmodule

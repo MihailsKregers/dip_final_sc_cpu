@@ -21,47 +21,79 @@
 `ifndef _DEFS_V_
 `define _DEFS_V_
 
-`define OP_LUI		7'b0110111
-`define OP_AUIPC	7'b0010111
-`define OP_JAL		7'b1101111
-`define OP_JALR		7'b1100111
-`define OP_COND_BR	7'b1100011
-`define OP_LDR		7'b0000011
-`define OP_STR		7'b0100011
-`define OP_ALU_I	7'b0010011
-`define OP_ALU		7'b0110011
-`define OP_FENCE	7'b0001111
-`define OP_E_CSR	7'b1110011
+//Alu 1 operand mux option definitions
+`define OP1_SRC_IMM			2'b01
+`define OP1_SRC_INST			2'b10
+`define OP1_SRC_RD1			2'b11
 
-`define ALU_ADD		4'b0000
-`define ALU_SUB		4'b1000
-`define ALU_SLL		4'b0001
-`define ALU_SLT		4'b0010
-`define ALU_SLTU	4'b0011
-`define ALU_XOR		4'b0100
-`define ALU_SRL		4'b0101
-`define ALU_SRA		4'b1101
-`define ALU_OR		4'b0110
-`define ALU_AND		4'b0111
+//Alu 2 operand mux option definitions
+`define OP2_SRC_IMM			2'b01
+`define OP2_SRC_INST			2'b10
+`define OP2_SRC_RD2			2'b11
 
-`define ALU_EQ		3'b000
-`define ALU_NE		3'b001
-`define ALU_LT		3'b100
-`define ALU_GE		3'b101
-`define ALU_LTU		3'b110
-`define ALU_GEU		3'b111
+//Immediate operand mux option definitions
+`define IMM_SRC_IMM			2'b01
+`define IMM_SRC_SHAMT			2'b10
+`define IMM_SRC_DIMM			2'b11
 
-`define FUN_T_E		3'b000
-`define FUN_T_RW	3'b001
-`define FUN_T_RS	3'b010
-`define FUN_T_RC	3'b011
-`define FUN_T_RWI	3'b101
-`define FUN_T_RSI	3'b110
-`define FUN_T_RCI	3'b111
+//Register file input source mux option definitions
+`define DIN_SRC_PC				2'b00
+`define DIN_SRC_MM				2'b01
+`define DIN_SRC_ALU			2'b10
+`define DIN_SRC_IMM			2'b11
 
-`define FUN_S_NOA	7'b0000000
-`define FUN_S_ISA	7'b0100000
+//PC source mux option definitions
+`define PC_SRC_ALU				2'b01
+`define PC_SRC_INTERRUPT		2'b10
+`define PC_SRC_COND_BR		2'b11
+`define PC_SRC_BRANCH_YES	1'b1
 
-`define REG_ZERO 	5'b00000
+//Operation code definitions
+`define OP_LUI					7'b0110111
+`define OP_AUIPC				7'b0010111
+`define OP_JAL					7'b1101111
+`define OP_JALR					7'b1100111
+`define OP_COND_BR				7'b1100011
+`define OP_LDR					7'b0000011
+`define OP_STR					7'b0100011
+`define OP_ALU_IMM				7'b0010011
+`define OP_ALU					7'b0110011
+`define OP_FENCE				7'b0001111
+`define OP_E_CSR				7'b1110011
+
+//Alu operation signal definitions
+`define ALU_ADD					4'b0000
+`define ALU_SUB					4'b0001
+`define ALU_SLL					4'b0010
+`define ALU_XOR					4'b0011
+`define ALU_SRL					4'b0100
+`define ALU_SRA					4'b0101
+`define ALU_OR					4'b0110
+`define ALU_AND					4'b0111
+`define ALU_EQ					4'b1000
+`define ALU_NE					4'b1001
+`define ALU_LT					4'b1010
+`define ALU_GE					4'b1011
+`define ALU_LTU					4'b1100
+`define ALU_GEU					4'b1101
+
+//Fun3 definitions
+`define FT_ADD					3'b000
+`define FT_SLL					3'b001
+`define FT_SLT					3'b010
+`define FT_SLTU					3'b011
+`define FT_XOR					3'b100
+`define FT_SRL					3'b101
+`define FT_OR					3'b110
+`define FT_AND					3'b111
+
+//Register file definitions
+`define REG_ZERO 				5'b00000
+`define REG_WRITE_ALLOWED	1'b1
+
+//Main memory signal definitions
+`define MM_WR_B					2'b01
+`define MM_WR_HW				2'b10
+`define MM_WR_W					2'b11
 
 `endif /* _DEFS_V_ */
