@@ -22,7 +22,7 @@
 `define _DEFS_V_
 
 //Alu 1 operand mux option definitions
-`define OP1_SRC_IMM			2'b01
+`define OP1_SRC_PC				2'b01
 `define OP1_SRC_INST			2'b10
 `define OP1_SRC_RD1			2'b11
 

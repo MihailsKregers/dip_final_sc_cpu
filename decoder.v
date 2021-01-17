@@ -22,36 +22,47 @@
 module decoder
 	(
 	input [31:0] INSTR,
+	output [19:0] DIN_IMM,
+	output [12:0] PC_IMM_ADD,
+	output [1:0] OP2_SEL,
+	output [1:0] DIN_SEL,
+	output [1:0] TRIM_CTL,
+	output [20:0] J_IMM,	
 	output [4:0] RS1,
 	output [4:0] RS2,
 	output [4:0] RD,
-	output [3:0] ALU_OP,
-	output ALU_SRC,
-	output [11:0] IMM,
-	output ALLOW_WR, 
-	output [12:0] JMP_ADDR,
-	output ALU_C_OP
+	output [11:0] A_IMM,
+	output [4:0] A_SHAMT,
+	output [12:0] C_IMM,
+	output REG_WR,
+	output [1:0] IMM_SEL,
+	output [3:0] ALU_CTL,
+	output [1:0] OP2_SEL,
+	output [1:0] MM_WR,
+	output [1:0] PC_SEL
     );
 	
-
-	reg [4:0] rs1;
-	reg [4:0] rs2;
-	reg [4:0] rd;
 	
 	reg [3:0] alu_op;
-	reg [11:0] imm;
-	reg [5:0] imm_shamt;
 	reg rf_allow_wr;
 	reg [1:0] mux_op1;
 	reg [1:0] mux_op2;
 	reg [1:0] mux_din_src;
 	
+	assign DIN_IMM = INSTR[31:12];
+	assign J_IMM = {INSTR[31],INSTR[19:12],INSTR[20],INSTR[30:21],0};
+	assign RS1 = INSTR[19:15];
+	assign RS2 = INSTR[24:20];
+	assign RD = INSTR[11:7];
+	assign A_IMM = INSTR[31:20];
+	assign A_SHAMT = INSTR[24:20];
+	assign C_IMM = {INSTR[31:25],INSTR[11:7]};
+
+	
+	
 	always@(INSTR) begin
 		case (INSTR[6:0]) // opcode case
 			`OP_ALU: begin // alu, not immediate
-				rs1 <= INSTR[19:15];
-				rs2 <= INSTR[24:20];
-				rd <= INSTR[11:7];
 				case (INSTR[14:12]) // funct3 case
 					`FT_ADD: begin
 						if (INSTR[30] == 0) begin
@@ -80,10 +91,6 @@ module decoder
 				rf_allow_wr <= `REG_WRITE_ALLOWED;
 			end
 			`OP_ALU_IMM: begin // alu, immediate
-				rs1 <= INSTR[19:15];
-				imm <= INSTR[31:20];
-				imm_shamt <= INSTR[24:20];
-				rd <= INSTR[11:7];
 				case (INSTR[14:12]) //funct3 case
 					`FT_ADD: alu_op <= `ALU_ADD;
 					`FT_SLT: alu_op <= `ALU_LT;
@@ -115,12 +122,17 @@ module decoder
 		endcase
 	end
 	
-	assign ALU_SRC = alu_src;
-	assign RS1 = rs1;
-	assign RS2 = rs2;
-	assign RD = rd;
+	assign RS1 = INSTR[19:15];
+	assign RS2 = INSTR[24:20];
+	assign RD = INSTR[11:7];
+	assign IMM = INSTR[31:20];
+	assign SHAMT = INSTR[24:20];
+	assign IMM_BR = {INSTR[31:25],INSTR[11:7]};
+	assign MUX_OP1_IMM = {INSTR[31],INSTR[19:12],INSTR[20],INSTR[30:21],0};
+	assign JMP_IMM = {INSTR[31],INSTR[7],INSTR[30:25],INSTR[11:8],0};
+	assign IMM_DIN = INSTR[31:12];
+	assign ALU_SRC = alu_src; //imm/reg mux
 	assign ALU_OP = alu_op;
-	assign IMM = imm;
 	assign ALLOW_WR = allow_wr;
 	assign JMP_ADDR = jmp_addr;
 	assign ALU_C_OP = alu_c_op;

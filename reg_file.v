@@ -23,10 +23,10 @@
 module reg_file
 	(
 	input CLK,
-	input [31:0] DIN,
 	input [4:0] RS1,
 	input [4:0] RS2,
 	input [4:0] RD,
+	input [31:0] DIN,
 	input WR,
 	output [31:0] RD1,
 	output [31:0] RD2

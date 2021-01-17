@@ -3,7 +3,7 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    21:23:22 01/17/2021 
+// Create Date:    18:40:15 01/17/2021 
 // Design Name: 
 // Module Name:    sign_ext_21 
 // Project Name: 
@@ -18,7 +18,7 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module sign_ext_21(
+module sign_ext_20(
 		input [20:0] UNEXT,
 		output [31:0] EXT
     );
