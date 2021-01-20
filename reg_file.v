@@ -36,11 +36,11 @@ module reg_file
 	 
 	always@(posedge CLK) begin
 		if (WR == 1) begin
-			file[AD] <= RD;
+			file[RD] <= DIN;
 		end
 	end
 	
-	assign RD1 = (A1 == `REG_ZERO) ? 0 : file[A1];
-	assign RD2 = (A2 == `REG_ZERO) ? 0 : file[A2];
+	assign RD1 = (RS1 == `REG_ZERO) ? 0 : file[RS1];
+	assign RD2 = (RS2 == `REG_ZERO) ? 0 : file[RS2];
 	
 endmodule

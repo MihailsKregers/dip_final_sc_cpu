@@ -27,7 +27,7 @@ module mux_op1(
 		output [31:0] OUT
     );
 
-assign OUT = (CTL == `OP1_SRC_PC) ? IMM :
+assign OUT = (CTL == `OP1_SRC_PC) ? PC :
 					((CTL == `OP1_SRC_INST) ? INST : RD);
 
 endmodule

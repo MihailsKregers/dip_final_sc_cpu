@@ -23,7 +23,7 @@ module pc(
 		input RST,
 		output [31:0] OUT
     );
-	
+
 	assign OUT = (RST == 1) ? 32'd0 : IN;
 	
 endmodule

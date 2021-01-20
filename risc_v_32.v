@@ -34,7 +34,7 @@ module risc_v_32(
 	wire [12:0] decoder_sext_jadder;
 	wire [1:0] decoder_op1_sel;
 	wire [1:0] decoder_din_sel;
-	wire [1:0] decoder_trimc;
+	wire [2:0] decoder_trimc;
 	wire [20:0] decoder_sext_jimm;
 	wire [4:0] decoder_rf_rs1;
 	wire [4:0] decoder_rf_rs2;
@@ -180,8 +180,8 @@ module risc_v_32(
 	
 	wire [31:0] sext_jadder_pc_adder;
 	sign_ext_13 SEXT_JADDER(
-		.IN(decoder_sext_jadder),
-		.OUT(sext_jadder_pc_adder)
+		.UNEXT(decoder_sext_jadder),
+		.EXT(sext_jadder_pc_adder)
 	);
 	wire [31:0] adder_j_pc_out;
 	pc_adder PC_IMM_ADDER(

@@ -21,12 +21,13 @@
 `include "defs.v"
 module trim_ext(
 		input [31:0] DIN,
-		input [1:0] CTL,
+		input [2:0] CTL,
 		output [31:0] DOUT
     );
 
-assign DOUT = ((CTL == `MM_WR_B) ? { DIN[7:0], 24'd0 } :
-					((CTL == `MM_WR_HW) ? { DIN[15:0], 16'd0} :
-					DIN[31:0]));
+assign DOUT = ((CTL == `FT_LBU) ? { 24'd0, DIN[7:0] } :
+					((CTL == `FT_LHU) ? { 16'd0, DIN[15:0] } :
+					((CTL == `FT_LB) ? { {24{DIN[7]}}, DIN[7:0] } :
+					((CTL == `FT_LH) ? { {16{DIN[15]}}, DIN[15:0] } : DIN))));
 
 endmodule

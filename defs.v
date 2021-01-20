@@ -87,11 +87,19 @@
 `define FT_OR					3'b110
 `define FT_AND					3'b111
 
+//Fun3 ldr definitions
+`define FT_LB					3'b000
+`define FT_LH					3'b001
+`define FT_LW					3'b010
+`define FT_LBU					3'b100
+`define FT_LHU					3'b101
+
 //Register file definitions
 `define REG_ZERO 				5'b00000
 `define REG_WRITE_ALLOWED	1'b1
 
 //Main memory signal definitions
+`define MM_WR_N					2'b00
 `define MM_WR_B					2'b01
 `define MM_WR_HW				2'b10
 `define MM_WR_W					2'b11
