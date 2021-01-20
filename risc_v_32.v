@@ -22,6 +22,7 @@ module risc_v_32(
 		input [31:0] INSTRUCTION,
 		input [31:0] D_IN,
 		input CLK,
+		input RST,
 		output [31:0] D_OUT,
 		output [31:0] D_OUT_ADDR,
 		output [31:0] NEXT,
@@ -144,4 +145,74 @@ module risc_v_32(
 		.CTL(decoder_aluc),
 		.OUT(alu_out)
 	);
+	wire [31:0] fill_din_sel_imm;
+	fill_0_20 FILL_DIN_SEL(
+		.IN(decoder_fill_din),
+		.OUT(fill_din_sel_imm)
+	);
+	
+	mux_din_src DIN_SEL(
+		.PC(),
+		.MM(trim_fill_din_sel),
+		.ALU(alu_out),
+		.INST(fill_din_sel_imm),
+		.CTL(decoder_din_sel),
+		.OUT(sel_din_rf)
+	);
+	wire [31:0] trim_fill_din_sel;
+	trim_ext TRIM_EXT(
+		.DIN(D_IN),
+		.CTL(decoder_trimc),
+		.DOUT(trim_fill_din_sel)
+	);
+	wire [31:0] pc_in;
+	wire [31:0] pc_out;
+	pc PC(
+		.IN(pc_in),
+		.RST(RST),
+		.OUT(pc_out)
+	);
+	wire [31:0] adder4_pc_out;
+	adder4 ADDER4_PC(
+		.IN(pc_out),
+		.OUT(adder4_pc_out)
+	);
+	
+	wire [31:0] sext_jadder_pc_adder;
+	sign_ext_13 SEXT_JADDER(
+		.IN(decoder_sext_jadder),
+		.OUT(sext_jadder_pc_adder)
+	);
+	wire [31:0] adder_j_pc_out;
+	pc_adder PC_IMM_ADDER(
+		.PC(pc_out),
+		.IMM(sext_jadder_pc_adder),
+		.OUT(adder_j_pc_out)
+	);
+	
+	set_ls0_32 LS_PC_COND(
+		.IN(alu_out),
+		.OUT()
+	);
+	
+	trim_ls_32 TRIM_PC_SEL(
+		.IN(alu_out),
+		.OUT(alu_cond_pc_sel)
+	);
+	wire alu_cond_pc_sel;
+	wire [31:0] ls_alu_pc_sel;
+	mux_pc_src PC_SEL(
+		.ALU(ls_alu_pc_sel),
+		.INTERRUPT(interrupt_pc_sel),
+		.COND_BR(adder_j_pc_out),
+		.PC_ADDER(adder4_pc_out),
+		.CTL(decoder_pc_sel),
+		.COND(alu_cond_pc_sel),
+		.OUT(pc_in)
+	);
+	wire [31:0] interrupt_pc_sel;
+	interrupt_vector INTERRUPT(
+		.OUT(interrupt_pc_sel)
+	);
+	assign pc_out = NEXT;
 endmodule

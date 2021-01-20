@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    14:22:14 12/29/2020 
+// Create Date:    20:21:44 01/20/2021 
 // Design Name: 
-// Module Name:    pc 
+// Module Name:    interrupt_vector 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,12 +18,10 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module pc(
-		input [31:0] IN,
-		input RST,
+module interrupt_vector(
 		output [31:0] OUT
     );
-	
-	assign OUT = (RST == 1) ? 32'd0 : IN;
-	
+
+assign OUT = 32'h00002DE4;
+
 endmodule

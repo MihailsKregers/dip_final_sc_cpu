@@ -19,10 +19,11 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module pc_adder(
-		input [31:0] IN,
+		input [31:0] PC,
+		input [31:0] IMM,
 		output [31:0] OUT
     );
 	 
-	 assign OUT = IN + 4;
+	 assign OUT = PC + IMM;
 
 endmodule
