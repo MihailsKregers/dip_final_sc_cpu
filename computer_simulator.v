@@ -56,11 +56,16 @@ mm MEMORY(
 	.D_OUT(mem_out_cpu_in)
 );
 
-reg [31:0] instruction;
-assign intstruction = {20'd5,5'd3,`OP_LUI};
+initial begin
+assign cpu_out_mem_in = {20'd5,5'd3,`OP_LUI};
 assign pc_mem_write_addr = 0;
 assign cpu_out_mem_in = 1;
+assign mem_write = `MM_WR_W;
+#25;
 assign clk = 1;
+#25;
 assign clk = 0;
+#25;
 assign clk = 1;
+end
 endmodule
