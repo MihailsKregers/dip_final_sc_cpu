@@ -22,13 +22,13 @@
 module computer_simulator(
     );
 
-wire [1:0] mem_write;
-wire [31:0] cpu_out_mem_in;
-wire [31:0] mem_out_cpu_in;
-wire [31:0] pc_cpu_out;
-wire [31:0] pc_mem_out;
-wire [31:0] pc_mem_read_addr;
-wire [31:0] pc_mem_write_addr;
+reg [1:0] mem_write;
+reg [31:0] cpu_out_mem_in;
+reg [31:0] mem_out_cpu_in;
+reg [31:0] pc_cpu_out;
+reg [31:0] pc_mem_out;
+reg [31:0] pc_mem_read_addr;
+reg [31:0] pc_mem_write_addr;
 
 reg clk = 0;
 reg rst = 0;
@@ -57,15 +57,6 @@ mm MEMORY(
 );
 
 initial begin
-assign cpu_out_mem_in = {20'd5,5'd3,`OP_LUI};
-assign pc_mem_write_addr = 0;
-assign cpu_out_mem_in = 1;
-assign mem_write = `MM_WR_W;
-#25;
-assign clk = 1;
-#25;
-assign clk = 0;
-#25;
-assign clk = 1;
+//
 end
 endmodule

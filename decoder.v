@@ -49,6 +49,7 @@ module decoder
 	reg [1:0] mux_op1;
 	reg [1:0] mux_op2;
 	reg [1:0] mux_din_src;
+	reg [1:0] mux_imm_sel;
 	reg [2:0] load_trim_ctl;
 	reg [1:0] mm_write_amount;
 	
@@ -68,7 +69,7 @@ module decoder
 	assign DIN_SEL = mux_din_src;
 	assign TRIM_CTL = load_trim_ctl;
 	assign MM_WR = mm_write_amount;
-	
+	assign IMM_SEL = mux_imm_sel;
 	
 	always@(INSTR) begin
 		mm_write_amount <= `MM_WR_N;
@@ -122,9 +123,18 @@ module decoder
 			end
 			`OP_LDR: begin
 				load_trim_ctl <= INSTR[14:12];
+				mux_din_src <= `DIN_SRC_MM;
+				mux_imm_sel <= `IMM_SRC_IMM;
+				mux_op1 <= `OP1_SRC_RD1;
+				mux_op2 <= `OP2_SRC_IMM;
+				alu_op <= `ALU_ADD;
 				rf_allow_wr <= 1'b1;
 			end
 			`OP_STR: begin
+				mux_imm_sel <= `IMM_SRC_DIMM;
+				mux_op1 <= `OP1_SRC_RD1;
+				mux_op2 <= `OP2_SRC_IMM;
+				alu_op <= `ALU_ADD;
 				case(INSTR[14:12])
 					`FT_LB: mm_write_amount <= `MM_WR_B;
 					`FT_LH: mm_write_amount <= `MM_WR_HW;
@@ -132,10 +142,9 @@ module decoder
 				endcase
 			end
 			`OP_LUI: begin
-				rf_allow_wr <= 1'b1;
 				mux_din_src <= `DIN_SRC_IMM;
+				rf_allow_wr <= 1'b1;
 			end
 		endcase
 	end
-
 endmodule
